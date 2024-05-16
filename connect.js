@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/myapp";
+const MONGO_URL = "mongodb+srv://aryasamik:2hOMGQULBfTWMPsf@cluster0.hvlzfwk.mongodb.net/";
 
 let connect = () => {
     mongoose.connect(MONGO_URL)

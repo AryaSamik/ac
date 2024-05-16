@@ -25,8 +25,6 @@ app.get("/api/user", asyncWrap(async(req, res, next) => {
 app.post("/api/user", asyncWrap(async(req, res, next) => {
     let user = new User(req.body.user);
     user.password = await bcrypt.hash(user.password, 10);
-    console.log(user.password);
-    console.log(user);
     let response = await user.save();
     res.json({
         message:"Sign Up Successfull",
