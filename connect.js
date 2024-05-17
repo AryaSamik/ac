@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-
-const MONGO_URL = "mongodb+srv://aryasamik:2hOMGQULBfTWMPsf@cluster0.hvlzfwk.mongodb.net/";
+require('dotenv').config();
 
 let connect = () => {
-    mongoose.connect(MONGO_URL)
+    mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log("connected to db");
     })
@@ -13,4 +12,4 @@ let connect = () => {
 }
 
 module.exports = connect;
-// connect();
+connect();

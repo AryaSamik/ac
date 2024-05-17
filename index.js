@@ -32,6 +32,25 @@ app.post("/api/user", asyncWrap(async(req, res, next) => {
     });
 }));
 
+app.post("/api/login", asyncWrap( async (req, res) => {
+    let {username, password} = req.body;
+    let user = await User.find({username: username});
+    if(!user){
+        throw new ExpressError(404, "No such user exists");
+    }
+    else{
+        if(bcrypt.compare(password, user[0].password)){
+            res.json({
+                message:"Login successful",
+                response: user[0]
+            });
+        }
+        else{
+            throw new ExpressError(400, "Incorrect password");
+        }
+    }
+}));
+
 app.use((err, req, res, next) => {
     let {status = 500, message = "some error occured"} = err;
     res.status(status).json({message});
