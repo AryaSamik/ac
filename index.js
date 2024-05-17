@@ -32,7 +32,7 @@ app.post("/api/user", asyncWrap(async(req, res, next) => {
     });
 }));
 
-app.post("/api/login", asyncWrap( async (req, res) => {
+app.post("/api/user/login", asyncWrap( async (req, res) => {
     let {username, password} = req.body;
     let user = await User.find({username: username});
     if(!user){
@@ -50,6 +50,10 @@ app.post("/api/login", asyncWrap( async (req, res) => {
         }
     }
 }));
+
+app.all("*", (req, res, next) => {
+    next(new ExpressError(404, "Page Not Found"));
+});
 
 app.use((err, req, res, next) => {
     let {status = 500, message = "some error occured"} = err;
