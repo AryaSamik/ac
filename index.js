@@ -4,9 +4,10 @@ const app = express();
 const User = require("./models/user.js");
 const asyncWrap = require("./utils/asyncWrap.js");
 const ExpressError = require("./utils/ExpressError.js");
-const bcrypt = require('bcrypt');
 const Admin = require("./models/admin.js");
 require('dotenv').config();
+const {encrypt, decrypt} = require("./utils/crypt.js");
+const jwt = require("jsonwebtoken");
 
 connect();
 
@@ -24,9 +25,14 @@ app.get("/api/user", asyncWrap(async(req, res, next) => {
 }));
 
 app.post("/api/user", asyncWrap(async(req, res, next) => {
-    let user = new User(req.body.user);
-    console.log(req.body);
-    user.password = await bcrypt.hash(user.password, 10);
+    let user = req.body.user;
+    user.password = await encrypt(user.password);
+    let obj = {
+        username: user.username,
+        password: user.password
+    };
+    user.token = jwt.sign(obj, "secretUser");
+    user = new User(user);
     let response = await user.save();
     res.json({
         message:"Sign Up Successfull",
@@ -41,9 +47,14 @@ app.post("/api/user/login", asyncWrap( async (req, res) => {
         throw new ExpressError(404, "No such user exists");
     }
     else{
-        if(await bcrypt.compare(password, user[0].password)){
+        let obj = {
+            username: username,
+            password: password
+        };
+        //NEED TO ADD JWT VERIFICATION
+        if(await decrypt(password, user[0].password)){
             res.json({
-                message:"Login successful",
+                message: "Login successful",
                 response: user[0]
             });
         }
@@ -78,9 +89,8 @@ app.all("*", (req, res, next) => {
 
 app.use((err, req, res, next) => {
     let {status = 500, message = "some error occured"} = err;
-    // console.log(err);
     res.status(status).json({message});
-})
+});
 
 app.listen(8080, () => {
     console.log("server is listening to port 8080");
