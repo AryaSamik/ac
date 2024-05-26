@@ -14,7 +14,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
     res.json({
-        message: "Welcome to A-C api"
+        message: "Welcome to A-C api",
+        guide: {
+            "/api/user" : "get, takes key as query",
+            "/api/user" : "post, adds new user and takes name(firstname, middlename, lastname), dateofbirth, email, username, password in body",
+            "/api/user/login" : "post, takes username and password in body",
+            "/api/admin/login" : "post, takes adminid and password in body"
+        }
     });
 });
 
@@ -69,6 +75,7 @@ app.post("/api/admin/login", asyncWrap( async (req, res) => {
         if(await decrypt(password, admin[0].password)){
             res.json({
                 message: `Admin ${adminid} Logged in`,
+                api_key: process.env.API_KEY,
                 response: admin[0]
             });
         }
