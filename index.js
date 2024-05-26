@@ -7,7 +7,6 @@ const ExpressError = require("./utils/ExpressError.js");
 const Admin = require("./models/admin.js");
 require('dotenv').config();
 const {encrypt, decrypt} = require("./utils/crypt.js");
-const jwt = require("jsonwebtoken");
 
 connect();
 
@@ -27,11 +26,6 @@ app.get("/api/user", asyncWrap(async(req, res, next) => {
 app.post("/api/user", asyncWrap(async(req, res, next) => {
     let user = req.body.user;
     user.password = await encrypt(user.password);
-    let obj = {
-        username: user.username,
-        password: user.password
-    };
-    user.token = jwt.sign(obj, "secretUser");
     user = new User(user);
     let response = await user.save();
     res.json({
@@ -47,11 +41,6 @@ app.post("/api/user/login", asyncWrap( async (req, res) => {
         throw new ExpressError(404, "No such user exists");
     }
     else{
-        let obj = {
-            username: username,
-            password: password
-        };
-        //NEED TO ADD JWT VERIFICATION
         if(await decrypt(password, user[0].password)){
             res.json({
                 message: "Login successful",
@@ -65,13 +54,13 @@ app.post("/api/user/login", asyncWrap( async (req, res) => {
 }));
 
 app.post("/api/admin/login", asyncWrap( async (req, res) => {
-    let {adminid, password, token} = req.body;
+    let {adminid, password} = req.body;
     let admin = await Admin.find({adminid: adminid});
     if(!admin[0]){
         throw new ExpressError(404, "No such admin");
     }
     else{
-        if(await bcrypt.compare(password, admin[0].password) && token === admin[0].token){
+        if(await decrypt(password, admin[0].password)){
             res.json({
                 message: `Admin ${adminid} Logged in`,
                 response: admin[0]
