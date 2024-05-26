@@ -12,6 +12,12 @@ connect();
 
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (req, res) => {
+    res.json({
+        message: "Welcome to A-C api"
+    });
+});
+
 app.get("/api/user", asyncWrap(async(req, res, next) => {
     let {key} = req.query;
     if(key === process.env.API_KEY){
