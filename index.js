@@ -16,10 +16,10 @@ app.get("/", (req, res) => {
     res.json({
         message: "Welcome to A-C api",
         guide: {
-            "/api/user" : "get, takes key as query",
-            "/api/user" : "post, adds new user and takes name(firstname, middlename, lastname), dateofbirth, email, username, password in body",
-            "/api/user/login" : "post, takes username and password in body",
-            "/api/admin/login" : "post, takes adminid and password in body"
+            "GET /api/user" : "takes key as query",
+            "POST /api/user" : "adds new user and takes name(firstname, middlename, lastname), dateofbirth, email, username, password in body",
+            "POST /api/user/login" : "takes username and password in body",
+            "POST /api/admin/login" : "takes adminid and password in body"
         }
     });
 });
