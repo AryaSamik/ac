@@ -7,10 +7,12 @@ const ExpressError = require("./utils/ExpressError.js");
 const Admin = require("./models/admin.js");
 require('dotenv').config();
 const {encrypt, decrypt} = require("./utils/crypt.js");
+const cors = require("cors");
 
 connect();
 
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.get("/", (req, res) => {
     res.json({
