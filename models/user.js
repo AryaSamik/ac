@@ -3,18 +3,16 @@ const Schema = mongoose.Schema;
 const { v4: uuidv4 } = require('uuid');
 
 const userSchema = new Schema({
-    name: {
-        firstname:{
-            type:String,
-            required:true
-        },
-        middlename:{
-            type: String
-        },
-        lastname:{
-            type:String,
-            required:true
-        }
+    firstname:{
+        type:String,
+        required:true
+    },
+    middlename:{
+        type: String
+    },
+    lastname:{
+        type:String,
+        required:true
     },
     dateofbirth: {
         type: Date,
@@ -22,10 +20,6 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        required: true
-    },
-    username: {
-        type:String,
         required: true,
         unique: true
     },

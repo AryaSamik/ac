@@ -38,7 +38,7 @@ app.get("/api/user", asyncWrap(async(req, res, next) => {
 }));
 
 app.post("/api/user", asyncWrap(async(req, res, next) => {
-    let user = req.body.user;
+    let user = req.body;
     user.password = await encrypt(user.password);
     user = new User(user);
     let response = await user.save();
@@ -49,8 +49,8 @@ app.post("/api/user", asyncWrap(async(req, res, next) => {
 }));
 
 app.post("/api/user/login", asyncWrap( async (req, res) => {
-    let {username, password} = req.body;
-    let user = await User.find({username: username});
+    let {email, password} = req.body;
+    let user = await User.find({email: email});
     if(!user[0]){
         throw new ExpressError(404, "No such user exists");
     }
@@ -76,7 +76,7 @@ app.post("/api/admin/login", asyncWrap( async (req, res) => {
     else{
         if(await decrypt(password, admin[0].password)){
             res.json({
-                message: `Admin ${adminid} Logged in`,
+                message: `${adminid} Logged in`,
                 api_key: process.env.API_KEY,
                 response: admin[0]
             });
