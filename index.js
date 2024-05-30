@@ -13,6 +13,7 @@ connect();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
     res.json({
