@@ -8,12 +8,13 @@ const Admin = require("./models/admin.js");
 require('dotenv').config();
 const {encrypt, decrypt} = require("./utils/crypt.js");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 connect();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
     res.json({
