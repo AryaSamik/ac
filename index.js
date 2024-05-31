@@ -52,6 +52,9 @@ app.post("/api/user", asyncWrap(async(req, res, next) => {
 
 app.post("/api/user/login", asyncWrap( async (req, res) => {
     let {email, password} = req.body;
+    if(email=="" || password==""){
+        throw new ExpressError(400, "Invalid Credentials")
+    }
     let user = await User.find({email: email});
     if(!user[0]){
         throw new ExpressError(404, "No such user exists");
