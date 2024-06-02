@@ -74,6 +74,9 @@ app.post("/api/user/login", asyncWrap( async (req, res) => {
 
 app.post("/api/admin/login", asyncWrap( async (req, res) => {
     let {adminid, password} = req.body;
+    if(JSON.stringify(req.body)==="{}" || admin==="" || password===""){
+        throw ExpressError(400, "Invalid Credentials");
+    }
     let admin = await Admin.find({adminid: adminid});
     if(!admin[0]){
         throw new ExpressError(404, "No such admin");
@@ -87,7 +90,7 @@ app.post("/api/admin/login", asyncWrap( async (req, res) => {
             });
         }
         else{
-            throw new ExpressError(400, "Incorrect credentials");
+            throw new ExpressError(400, "Incorrect password");
         }
     }
 }));
