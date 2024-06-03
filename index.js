@@ -41,6 +41,9 @@ app.get("/api/user", asyncWrap(async(req, res, next) => {
 
 app.post("/api/user", asyncWrap(async(req, res, next) => {
     let user = req.body;
+    if(user.password === ""){
+        throw new ExpressError(400,"Password Required");
+    }
     user.password = await encrypt(user.password);
     user = new User(user);
     let response = await user.save();
