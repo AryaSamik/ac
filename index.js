@@ -53,6 +53,7 @@ app.post("/api/user", asyncWrap(async(req, res, next) => {
     });
 }));
 
+//Patch route
 app.patch("/api/user", asyncWrap( async (req, res) => {
     // console.log(req.body);
     let users = req.body;
