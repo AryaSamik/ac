@@ -42,7 +42,7 @@ app.get("/api/user", asyncWrap(async(req, res, next) => {
 app.post("/api/user", asyncWrap(async(req, res, next) => {
     let user = req.body;
     if(user.password === ""){
-        throw new ExpressError(400,"Password Required");
+        throw new ExpressError(400,"Data Required");
     }
     user.password = await encrypt(user.password);
     user = new User(user);
@@ -51,6 +51,10 @@ app.post("/api/user", asyncWrap(async(req, res, next) => {
         message:"Sign Up Successfull",
         response: response
     });
+}));
+
+app.patch("/api/user", asyncWrap( async (req, res) => {
+    
 }));
 
 app.post("/api/user/login", asyncWrap( async (req, res) => {
