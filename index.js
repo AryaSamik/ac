@@ -54,7 +54,16 @@ app.post("/api/user", asyncWrap(async(req, res, next) => {
 }));
 
 app.patch("/api/user", asyncWrap( async (req, res) => {
-    
+    // console.log(req.body);
+    let users = req.body;
+    users.map(async(user) => {
+        // console.log(user);
+        let resp = await User.updateOne({_id: user._id}, {$set: {verified: user.verified}});
+        // console.log(resp);
+    })
+    res.json({
+        message: "Updation Successful"
+    })
 }));
 
 app.post("/api/user/login", asyncWrap( async (req, res) => {
